@@ -24,4 +24,4 @@ with open(target_floppy_file_path,'wb') as fobj:
     floppy_file_content[:len(binary_file_content)] = binary_file_content[:]
     fobj.write(floppy_file_content)
     
-print("软盘大小为{}字节，写入的二进制文件带下为{}字节".format(binary_file_size, floppy_file_size))
+print("软盘大小为{}字节，写入的二进制文件大小为{}字节".format(floppy_file_size, binary_file_size,))
