@@ -1,0 +1,34 @@
+###############################################################
+# bochsrc.txt file for DLX Linux disk image.
+###############################################################
+
+# how much memory the emulated machine will have
+megs: 32
+
+# filename of ROM images
+romimage: file=D:/bochs/Bochs-2.6.9/BIOS-bochs-latest
+vgaromimage: file=D:/bochs/Bochs-2.6.9/VGABIOS-lgpl-latest
+
+# what disk images will be used 
+floppya: 1_44=a.img, status=inserted
+
+
+# choose the boot disk.
+boot: floppy
+
+
+# where do we send log messages?
+log: bochsout.txt
+
+# disable the mouse, since DLX is text only
+mouse: enabled=0
+
+# enable key mapping, using US layout as default.
+#
+# NOTE: In Bochs 1.4, keyboard mapping is only 100% implemented on X windows.
+# However, the key mapping tables are used in the paste function, so 
+# in the DLX Linux example I'm enabling keyboard_mapping so that paste 
+# will work.  Cut&Paste is currently implemented on win32 and X windows only.
+
+keyboard: keymap=D:/bochs/Bochs-2.6.9/keymaps/x11-pc-us.map
+
