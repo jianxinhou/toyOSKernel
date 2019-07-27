@@ -6,7 +6,7 @@
 
 
 
-name|contribution|email
+name | contribution | email
 
 ---- | ----- | -----
 
