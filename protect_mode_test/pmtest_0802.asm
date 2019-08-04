@@ -6,15 +6,16 @@ org 0100h   ;设置为在FreeDos中运行的方式
 
 [SECTION .gdt]
 ;GDT部分
-;                                       段基址          段界限               属性
-LABEL_GDT:          Descriptor          0,              0,                  0               ;空描述符
-LABEL_DESC_NORMAL:  Descriptor          0,              0ffffh,             DA_DRW          ;Normal描述符（用于从保护模式跳转至实模式时设置段寄存器）
-LABEL_DESC_CODE32:  Descriptor          0,              SegCode32Len - 1,   DA_C + DA_32    ;32位代码段
-LABEL_DESC_CODE16:  Descriptor          0,              0ffffh,             DA_C            ;16位代码段
-LABEL_DESC_DATA:    Descriptor          0,              DataLen - 1,        DA_DRW          ;Data
-LABEL_DESC_STACK:   Descriptor          0,              TopOfStack,         DA_DRWA + DA_32 ;Stack
-LABEL_DESC_TEST:    Descriptor          0500000h,       0ffffh,             DA_DRW          ;测试代码段
-LABEL_DESC_VIDEO:   Descriptor          0B8000h,        0ffffh,             DA_DRW          ;显存段
+;                                           段基址          段界限               属性
+LABEL_GDT:              Descriptor          0,              0,                  0               ;空描述符
+LABEL_DESC_NORMAL:      Descriptor          0,              0ffffh,             DA_DRW          ;Normal描述符（用于从保护模式跳转至实模式时设置段寄存器）
+LABEL_DESC_CODE32:      Descriptor          0,              SegCode32Len - 1,   DA_C + DA_32    ;32位代码段
+LABEL_DESC_CODE16:      Descriptor          0,              0ffffh,             DA_C            ;16位代码段
+LABEL_DESC_DATA:        Descriptor          0,              DataLen - 1,        DA_DRW          ;Data
+LABEL_DESC_STACK:       Descriptor          0,              TopOfStack,         DA_DRWA + DA_32 ;Stack
+LABEL_DESC_TEST:        Descriptor          0500000h,       0ffffh,             DA_DRW          ;测试代码段
+LABEL_DESC_VIDEO:       Descriptor          0B8000h,        0ffffh,             DA_DRW          ;显存段
+LABEL_DESC_LDT:         Descriptor          0,              LdtLen - 1,         DA_LDT          ;LDT段
 
 GdtLen  equ $   -   LABEL_GDT   ;GDT长度
 ;GdtPtr将会被加载进GDTR
@@ -29,6 +30,7 @@ SelectorData        equ LABEL_DESC_DATA     -   LABEL_GDT   ;Data段对应的Sel
 SelectorStack       equ LABEL_DESC_STACK    -   LABEL_GDT   ;Stack段对应的Selector
 SelectorTest        equ LABEL_DESC_TEST     -   LABEL_GDT   ;Test段对应的Selector
 SelectorVideo       equ LABEL_DESC_VIDEO    -   LABEL_GDT   ;video段对应的Selector   
+SelectorLDT         equ LABEL_DESC_LDT      -   LABEL_GDT   ;LDT段对应的Selector
 
 [SECTION .data]
 ;数据段
@@ -102,13 +104,33 @@ LABEL_BEGIN:
 
     ;设置堆栈段段基址
     xor eax, eax
-    mov ax, dx
+    mov ax, ds
     shl eax, 4
     add eax, LABEL_STACK
     mov word [LABEL_DESC_STACK + 2], ax
     shr eax, 16
     mov byte [LABEL_DESC_STACK + 4], al
     mov byte [LABEL_DESC_STACK + 7], ah
+
+    ;设置LDT段段基址
+    xor eax, eax
+    mov ax, ds
+    shl eax, 4
+    add eax,LABEL_LDT
+    mov word [LABEL_DESC_LDT + 2], ax
+    shr eax, 16
+    mov byte [LABEL_DESC_LDT + 4], al
+    mov byte [LABEL_DESC_LDT + 7], ah
+
+    ;设置LDT中CODEA段段基址
+    xor eax, eax
+    mov ax, ds
+    shl eax, 4
+    add eax, LABEL_CODE_A
+    mov word [LABEL_LDT_DESC_CODEA + 2], ax
+    shr eax, 16
+    mov byte [LABEL_LDT_DESC_CODEA + 4], al
+    mov byte [LABEL_LDT_DESC_CODEA + 7], ah
 
     ;为加载GDT寄存器做准备
     ;取出当前数据段基址
@@ -207,7 +229,11 @@ LABEL_SEG_CODE32:
     call TestWrite
     call TestRead
 
-    jmp SelectorCode16:0
+    ;跟GDTR不同，LDTR加载的似乎不是类似上面GdtPtr的数据结构，而是相应的Selector
+    mov ax, SelectorLDT
+    lldt ax
+    ;跳转至LDT的CodeA段
+    jmp SelectorLDTCodeA:0
 ;===================================================================================
 ;函数名     ：  TestRead
 ;功能       ：  读取目标内存
@@ -339,3 +365,34 @@ LABEL_SEG_CODE16:
 LABEL_GO_BACK_TO_REAL:
     jmp 0:LABLE_REAL_ENTRY
 Code16Len   equ $ - LABEL_SEG_CODE16
+
+[SECTION .ldt]
+;LDT部分
+ALIGN 32
+LABEL_LDT:
+;LDT描述符                                  段基址          段界限               属性
+LABEL_LDT_DESC_CODEA:   Descriptor          0,              CodeALen - 1,       DA_C + DA_32               ;CodeA段
+ 
+LdtLen  equ $   -   LABEL_LDT   ;LDT长度
+
+SelectorLDTCodeA    equ LABEL_LDT_DESC_CODEA-   LABEL_LDT + SA_TIL   ;CodeA段对应的LDT Selector，SA_TIL将T1位置置1，表示LDT选择子   
+
+[SECTION .ldt_codea]
+;CodeA段（LDT，32位代码段）
+ALIGN 32
+[BITS 32]
+LABEL_CODE_A:
+    ;使用gs来选择显存段
+    mov ax, SelectorVideo   
+    mov gs, ax
+
+    ;在第14行开头增加红底黑字的'L'
+    mov edi, (80 * 14 + 0) * 2
+    mov ah, 0Ch
+    mov al, 'L'
+    mov [gs:edi], ax
+
+    ;跳转至保护模式下的16位代码段
+    jmp SelectorCode16:0
+CodeALen    equ $ - LABEL_CODE_A
+

@@ -1,7 +1,8 @@
-# @File  : dd.py
-# @Author: jianxinhou
-# @Date  : 2019/7/26
-# @Desc  : 一段简易的将二进制程序写入软盘镜像文件的程序
+# @File         : dd.py
+# @Author       : jianxinhou
+# @Date         : 2019/7/26
+# @Desc         : 一段简易的将二进制程序写入软盘镜像文件的程序
+# @How to use   ：./dd.py [被写入文件] [目标镜像文件]
 import sys
 
 #被写入的二进制文件

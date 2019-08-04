@@ -16,17 +16,22 @@
 ## 开发环境
 
 - Windows 10 / Windows Subsystem for Linux
-
 - VS Code
 - Bochs 2.6.9
 - GCC，GNU Make，NASM
+- UltraISO 试用版
 
 ## 开发进度与问题记录
+
+#### 2019-8-03
+
+- 理解了代码`chapter3/c/pmtest3.asm`，此代码在`protect_mode_test/pmtest_0730.asm`的基础上引入了`LDT`，我照着书实现了一遍，并添加了相应的注释，详见`protect_mode_test/pmtest_0802.asm`（保护模式的学习什么时候能结束啊！！！！！）
+
 
 #### 2019-8-01
 
 - 再次复习了一些汇编语言知识
-- 理解了代码`chapter3/b/pmtest2.asm`，此代码从实模式跳至保护模式，向内存地址为`5M`的内存空间处写入了一些数据，又从保护模式跳回了实模式，我照着书敲了一遍，并根据自己的理解为代码添加了注释，详见`protect_mode_test/pmtest_0730.asm`
+- 理解了代码`chapter3/b/pmtest2.asm`，此代码从实模式跳至保护模式，向内存地址为`5M`的内存空间处写入了一些数据，又从保护模式跳回了实模式，我照着书实现了一遍，并根据自己的理解为代码添加了注释，详见`protect_mode_test/pmtest_0730.asm`
   - 为啥从保护模式跳至实模式要将所有段寄存器赋值为`SelectorNormal`，答案见：[关于从保护模式切换到实模式的相关说明](http://blog.chinaunix.net/uid-22683402-id-1771401.html)
 - `tips`：针对在`FreeDos`系统下运行我们编写的程序时，无法使用`bochsdbg`对程序进行调试问题的解决办法
   - 在我们想设置断点的地方加上`jmp $`
@@ -52,7 +57,7 @@
     - 更换阿里云软件源：[Ubuntu18.04下更改apt源为阿里云源](https://blog.csdn.net/zhangjiahao14/article/details/80554616)
     - 安装`build-essential`软件包和`NASM`
   - 书中需要使用`freedos`运行二进制程序，可在`WSL`下无法挂载软盘，只能在`Windows`中使用软碟通打开软盘，`bximage`生成的软盘镜像软碟通又无法读取，只能把程序放在`freedos.img`中，明天再看看有没有更好的解决方法
-- 尝试理解保护模式和书中所附代码`chapter3/a/pmtest1.asm`，同时照着书敲了一遍（我写的`dd.py`还挺好用:p），见`protect_mode_test/pmtest_0727.asm`，这里发现自己以前学过的汇编语言忘得七七八八了。实模式下的寻址，堆栈是如何压栈和出栈的，显存的地址，这些东西几乎都忘了，后面可能要再看看
+- 尝试理解保护模式和书中所附代码`chapter3/a/pmtest1.asm`，同时照着书实现了一遍（我写的`dd.py`还挺好用:p），见`protect_mode_test/pmtest_0727.asm`，这里发现自己以前学过的汇编语言忘得七七八八了。实模式下的寻址，堆栈是如何压栈和出栈的，显存的地址，这些东西几乎都忘了，后面可能要再看看
 
 #### 2019-7-26
 

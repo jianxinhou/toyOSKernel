@@ -11,7 +11,7 @@ vgaromimage: file=D:/bochs/Bochs-2.6.9/VGABIOS-lgpl-latest
 
 # what disk images will be used 
 floppya: 1_44=freedos.img, status=inserted
-#floppyb: 1_44=pm.img, status=inserted
+floppyb: 1_44=x.img, status=inserted
 
 
 # choose the boot disk.
