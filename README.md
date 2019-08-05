@@ -27,6 +27,14 @@
 
 - 理解了代码`chapter3/c/pmtest3.asm`，此代码在`protect_mode_test/pmtest_0730.asm`的基础上引入了`LDT`，我照着书实现了一遍，并添加了相应的注释，详见`protect_mode_test/pmtest_0802.asm`（保护模式的学习什么时候能结束啊！！！！！）
 
+- 用`Python`实现了一个第四章中的简易的二进制查看器`xxd.py`，用法如下：
+
+  ```shell
+  # ./xxd.py [每行的字节数] [目标文件被查看的起始地址（16进制）] [被查看字节数] [目标文件]
+  ./xxd.py 16 0x2600 512 x.img #每行字节数为16，目标文件被查看的起始地址为0x2600，被查看的字节数为512，目标文件为x.img
+  ```
+
+  功能非常简单，大部分的时间用在调输出格式上了 :p
 
 #### 2019-8-01
 
@@ -68,13 +76,13 @@
   - 安装`Bochs 2.6.9`
     - 调试模式和`Linux`版本的`Bochs`有一些区别，`Windows`下调试模式是一个独立的程序`bochsdbg.exe`
     - 调试模式的命令：[bochs2.6.9 配置文件详解.和相关调试到虚拟机运行](https://blog.csdn.net/chprain/article/details/79328673)
-  - 将``Bochs`的安装目录添加进了环境变量`Path`中，以便直接使用
+  - 将`Bochs`的安装目录添加进了环境变量`Path`中，以便直接使用
 
 - 用`Python`实现了一个简易的引导扇区写入工具`dd.py`，用法如下：
 
   ```shell
-  #boot.bin为引导扇区内容，a.img为软盘镜像
-  ./dd.py boot.bin a.img 
+  # ./dd.py [被写入文件] [目标镜像文件]
+  ./dd.py boot.bin a.img # boot.bin为引导扇区内容，a.img为软盘镜像
   ```
 
 - 实现了第一章中的引导扇区
