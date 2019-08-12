@@ -62,7 +62,7 @@ LABEL_BEGIN:
     mov ss, ax
     mov sp, 0100h
 
-    ;将LABEL_GO_BACK_TO_REAL处改为jmp 0:LABLE_REAL_ENTRY
+    ;将LABEL_GO_BACK_TO_REAL处改为jmp 实模式下的cs:LABLE_REAL_ENTRY
     mov [LABEL_GO_BACK_TO_REAL + 3], ax
     ;保存当前栈顶地址
     mov [SPValueInRealMode], sp

@@ -12,6 +12,7 @@
 
 - 《Orange's 一个操作系统的实现》 于渊
 - 《汇编语言(第3版) 》 王爽
+- [Python教程 - 廖雪峰的官方网站](https://www.liaoxuefeng.com/wiki/1016959663602400)
 
 ## 开发环境
 
@@ -22,6 +23,12 @@
 - UltraISO 试用版
 
 ## 开发进度与问题记录
+
+#### 2019-8-11
+
+学习了样例代码`chapter3/d/pmtest4.asm`，根据自己的理解实现了`protect_mode_test/pmtest_0811.asm`，并添加了注释，此代码在`protect_mode_test/pmtest_0802.asm`的基础上引入了调用门（保护模式的学习什么时候能结束啊！！！！！）
+
+- 这里遇到了一个问题：在初始化`LABEL_DESC_CODE_DEST`描述符时，我将段基址设置成了`LABEL_DESC_CODE_DEST`，程序跳转到了一个奇怪的位置，而非想要的`LABEL_SEG_CODE_DEST`处（这一错误我找了几个小时......）
 
 #### 2019-8-08
 
@@ -84,12 +91,12 @@
 - 学习了`FAT12`文件系统
 - 独立实现了`ReadSector`函数，此函数的功能为读取软盘扇区到目标地址处，详见`boot.asm`
   - 软盘存储数据按照如下顺序：0号盘面的0号磁道，1号盘面的0号磁道，0号盘面的1号磁道...，以此类推
-- 实现了`DispStr`函数，此函数能够在显示器上输出一些信息，见`boot.asm`
+- 实现了`DispStr`函数，此函数能够在显示器上输出一些信息，详见`boot.asm`
 - 完成了一部分`boot.asm`
 
 #### 2019-8-03
 
-- 理解了代码`chapter3/c/pmtest3.asm`，此代码在`protect_mode_test/pmtest_0730.asm`的基础上引入了`LDT`，我照着书实现了一遍，并添加了相应的注释，详见`protect_mode_test/pmtest_0802.asm`（保护模式的学习什么时候能结束啊！！！！！）
+- 理解了样例代码`chapter3/c/pmtest3.asm`，根据自己的理解实现了`protect_mode_test/pmtest_0802.asm`，并添加了注释，此代码在`protect_mode_test/pmtest_0730.asm`的基础上引入了`LDT`（保护模式的学习什么时候能结束啊！！！！！）
 
 - 用`Python`实现了一个第四章中的简易的二进制查看器`xxd.py`，用法如下：
 
@@ -103,7 +110,7 @@
 #### 2019-8-01
 
 - 再次复习了一些汇编语言知识
-- 理解了代码`chapter3/b/pmtest2.asm`，此代码从实模式跳至保护模式，向内存地址为`5M`的内存空间处写入了一些数据，又从保护模式跳回了实模式，我照着书实现了一遍，并根据自己的理解为代码添加了注释，详见`protect_mode_test/pmtest_0730.asm`
+- 学习了样例代码`chapter3/b/pmtest2.asm`，此代码从实模式跳至保护模式，向内存地址为`5M`的内存空间处写入了一些数据，又从保护模式跳回了实模式，我照着书实现了一遍，并根据自己的理解实现了`protect_mode_test/pmtest_0730.asm`，并为代码添加了注释
   - 为啥从保护模式跳至实模式要将所有段寄存器赋值为`SelectorNormal`，答案见：[关于从保护模式切换到实模式的相关说明](http://blog.chinaunix.net/uid-22683402-id-1771401.html)
 - `tips`：针对在`FreeDos`系统下运行我们编写的程序时，无法使用`bochsdbg`对程序进行调试问题的解决办法
   - 在我们想设置断点的地方加上`jmp $`
@@ -115,7 +122,7 @@
 #### 2019-7-29
 
 - 复习了一些汇编语言知识
-- 理解了代码`chapter3/a/pmtest1.asm`，此代码实现了从实模式跳转至保护模式，并结合自己的理解给`protect_mode_test/pmtest_0727.asm`添加了注释
+- 学习了样例代码`chapter3/a/pmtest1.asm`，此代码实现了从实模式跳转至保护模式，并结合自己的理解实现了`protect_mode_test/pmtest_0727.asm`，并添加了注释
 - 理解了保护模式下的寻址方式
 
 #### 2019-7-27
@@ -129,7 +136,7 @@
     - 更换阿里云软件源：[Ubuntu18.04下更改apt源为阿里云源](https://blog.csdn.net/zhangjiahao14/article/details/80554616)
     - 安装`build-essential`软件包和`NASM`
   - 书中需要使用`freedos`运行二进制程序，可在`WSL`下无法挂载软盘，只能在`Windows`中使用软碟通打开软盘，`bximage`生成的软盘镜像软碟通又无法读取，只能把程序放在`freedos.img`中，明天再看看有没有更好的解决方法
-- 尝试理解保护模式和书中所附代码`chapter3/a/pmtest1.asm`，同时照着书实现了一遍（我写的`dd.py`还挺好用:p），见`protect_mode_test/pmtest_0727.asm`，这里发现自己以前学过的汇编语言忘得七七八八了。实模式下的寻址，堆栈是如何压栈和出栈的，显存的地址，这些东西几乎都忘了，后面可能要再看看
+- 尝试学习保护模式和书中所附代码`chapter3/a/pmtest1.asm`，同时照着书实现了一遍（我写的`dd.py`还挺好用:p），见`protect_mode_test/pmtest_0727.asm`，这里发现自己以前学过的汇编语言忘得七七八八了。实模式下的寻址，堆栈是如何压栈和出栈的，显存的地址，这些东西几乎都忘了，后面可能要再看看
 
 #### 2019-7-26
 

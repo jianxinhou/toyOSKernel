@@ -12,7 +12,7 @@ LABEL_DESC_NORMAL:      Descriptor          0,              0ffffh,             
 LABEL_DESC_CODE32:      Descriptor          0,              SegCode32Len - 1,   DA_C + DA_32    ;32位代码段
 LABEL_DESC_CODE16:      Descriptor          0,              0ffffh,             DA_C            ;16位代码段
 LABEL_DESC_CODE_DEST:   Descriptor          0,              SegCodeDestLen - 1, DA_C + DA_32    ;非一致代码段， 32
-LABEL_DESC_DATA:        Descriptor          0,              DataLen - 1,        DA_DRW + DA_DPL1;Data
+LABEL_DESC_DATA:        Descriptor          0,              DataLen - 1,        DA_DRW          ;Data段
 LABEL_DESC_STACK:       Descriptor          0,              TopOfStack,         DA_DRWA + DA_32 ;Stack
 LABEL_DESC_TEST:        Descriptor          0500000h,       0ffffh,             DA_DRW          ;测试代码段
 LABEL_DESC_VIDEO:       Descriptor          0B8000h,        0ffffh,             DA_DRW          ;显存段
@@ -70,7 +70,7 @@ LABEL_BEGIN:
     mov ss, ax
     mov sp, 0100h
 
-    ;将LABEL_GO_BACK_TO_REAL处改为jmp 0:LABLE_REAL_ENTRY
+    ;将LABEL_GO_BACK_TO_REAL处改为jmp 实模式下的cs:LABLE_REAL_ENTRY
     mov [LABEL_GO_BACK_TO_REAL + 3], ax
     ;保存当前栈顶地址
     mov [SPValueInRealMode], sp
@@ -102,7 +102,7 @@ LABEL_BEGIN:
     xor eax, eax
     mov ax, cs
     shl eax, 4
-    add eax, LABEL_DESC_CODE_DEST
+    add eax, LABEL_SEG_CODE_DEST    ;我傻了，这条语句写错了，写成了add eax, LABEL_DESC_CODE_DEST，找了半天都没找到
     mov word [LABEL_DESC_CODE_DEST + 2], ax
     shr eax, 16
     mov byte [LABEL_DESC_CODE_DEST + 4], al
@@ -239,15 +239,13 @@ LABEL_SEG_CODE32:
     add edi, 2          ;使edi指向下一个显存地址
     jmp .1
 .2:
-    jmp $
     call DispReturn     
     
-    ; call TestRead       
-    ; call TestWrite
-    ; call TestRead
+    call TestRead       
+    call TestWrite
+    call TestRead
 
-    
-    nop
+    call DispReturn   
 
     ;使用调用门
     call SelectorCallGateTest:0
@@ -366,16 +364,16 @@ DispReturn:
     ret
 ;DispReturn结束
 ;===================================================================================
-
 SegCode32Len	equ	$ - LABEL_SEG_CODE32
+
 [SECTION .sdest]
 [BITS 32]
 LABEL_SEG_CODE_DEST:
-    jmp $
+    ; jmp $
     mov ax, SelectorVideo
     mov gs, ax
 
-    mov edi, (80 * 12 + 0) * 2
+    mov edi, (80 * 13 + 0) * 2
     mov ah, 0Ch
     mov al, 'C'
     mov [gs:edi], ax

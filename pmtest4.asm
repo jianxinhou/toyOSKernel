@@ -228,6 +228,7 @@ LABEL_SEG_CODE32:
 	jmp	.1
 .2:	; 显示完毕
 
+	jmp $
 	call	DispReturn
 
 	; 测试调用门（无特权级变换），将打印字母 'C'
