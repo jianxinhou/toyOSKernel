@@ -24,9 +24,13 @@
 
 ## 开发进度与问题记录
 
+#### 2019-8-13
+
+学习了样例代码`chapter3\e\pmtest5.asm`，根据自己的理解实现了`protect_mode_test/pmtest_0813.asm`，并添加了注释，此程序在`protect_mode_test/pmtest_0811.asm`的基础上实现了两次不同特权级代码段间的跳转，一次从`ring0`跳至`ring3`，一次从`ring3`跳至`ring0`
+
 #### 2019-8-11
 
-学习了样例代码`chapter3/d/pmtest4.asm`，根据自己的理解实现了`protect_mode_test/pmtest_0811.asm`，并添加了注释，此代码在`protect_mode_test/pmtest_0802.asm`的基础上引入了调用门（保护模式的学习什么时候能结束啊！！！！！）
+学习了样例代码`chapter3/d/pmtest4.asm`，根据自己的理解实现了`protect_mode_test/pmtest_0811.asm`，并添加了注释，此代码在`protect_mode_test/pmtest_0802.asm`的基础上引入了调用门
 
 - 这里遇到了一个问题：在初始化`LABEL_DESC_CODE_DEST`描述符时，我将段基址设置成了`LABEL_DESC_CODE_DEST`，程序跳转到了一个奇怪的位置，而非想要的`LABEL_SEG_CODE_DEST`处（这一错误我找了几个小时......）
 
