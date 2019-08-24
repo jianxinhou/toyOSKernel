@@ -24,9 +24,21 @@
 
 ## 开发进度与问题记录
 
+#### 2019-8-20
+
+学习了保护模式中的页式存储，即样例代码`chapter3/f/pmtest6.asm`、`chapter3/g/pmtest7.asm`和`chapter3/h/pmtest8.asm`，根据自己的理解完成了`protect_mode_test/pmtest_0815.asm`并添加了注释。
+
+此程序在`protect_mode_test/pmtest_0730.asm`的基础上：
+
+- 启用了页式存储
+- 通过实模式下的中断读取了内存信息
+- 通过切换不同页表，跳转至同一地址处，执行了不同的程序
+
+根据我做实验写的`PSwitch`中对第`560~562`行进行注释和不注释分别运行，可以得知，页表在机器运行时会在寄存器中缓存一份，如果不更新`cr3`，仅更新页表项中的地址，那么页表不会重新加载至寄存器，程序在运行时也无法找到正确的地址
+
 #### 2019-8-13
 
-学习了样例代码`chapter3\e\pmtest5.asm`，根据自己的理解实现了`protect_mode_test/pmtest_0813.asm`，并添加了注释，此程序在`protect_mode_test/pmtest_0811.asm`的基础上实现了两次不同特权级代码段间的跳转，一次从`ring0`跳至`ring3`，一次从`ring3`跳至`ring0`
+学习了样例代码`chapter3/e/pmtest5.asm`，根据自己的理解实现了`protect_mode_test/pmtest_0813.asm`，并添加了注释。此程序在`protect_mode_test/pmtest_0811.asm`的基础上实现了两次不同特权级代码段间的跳转，一次从`ring0`跳至`ring3`，一次从`ring3`跳至`ring0`
 
 #### 2019-8-11
 
